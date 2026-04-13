@@ -1,0 +1,49 @@
+/* Remove default spacing */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Fullscreen video */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/*  Overlay content ON TOP of video */
+.overlay {
+    position: fixed;              /* IMPORTANT FIX */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    text-align: center;
+    color: #f5d27a;               /* soft golden */
+}
+
+/*  Big text */
+.overlay h1 {
+    font-size: 150px;
+    font-weight: bold;
+}
+
+/*  Tagline */
+.overlay h2 {
+    font-size: 80px;
+    margin: 20px 0;
+}
+
+/*  Orange button */
+.btn {
+    padding: 15px 40px;
+    font-size: 50px;
+    background: orange;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}

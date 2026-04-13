@@ -1,0 +1,138 @@
+
+/*  Background Video */
+.bg-video{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Full screen layout */
+html, body {
+    height: 100%;
+}
+
+/*  Hero section (full screen container) */
+.hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+}
+
+/*  Overlay (dim effect) */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/*  Content centered */
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    text-align: center;
+    z-index: 10;
+    width: 90%;
+}
+
+/*  Main Heading */
+.main-heading {
+    font-size: 120px;
+    font-weight: bold;
+    color: #FFD700; /* gold */
+    margin-bottom: 150px;
+}
+
+/*  Dropdown container */
+.box-container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+}
+
+/*  Individual box */
+/*  Box container spacing */
+.box-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /*  gap between Select City & Select Days */
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+/* Blue rectangular box */
+.box {
+    background-color: #0b3d91; /* dark blue */
+    padding: 95px 100px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-width: 500px;
+}
+
+/*  Label inside box */
+.box h3 {
+    color: #FFD700; /* gold text */
+    margin-bottom: 15px;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+/*  Bigger dropdown */
+.box select {
+    width: 370px;
+    padding: 30px;
+
+    border-radius: 8px;
+    border: none;
+
+    font-size: 40px;
+
+    background-color: white;
+    color: black;
+
+    cursor: pointer;
+}
+.search-btn {
+    padding: 14px 40px;
+    font-size: 40px;
+    font-weight: bold;
+margin-top: 50px;
+    background-color: #FFD700;
+    color: black;
+
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+/* Hover effect */
+.search-btn:hover {
+    background-color: #e6c200;
+    transform: scale(1.05);
+}

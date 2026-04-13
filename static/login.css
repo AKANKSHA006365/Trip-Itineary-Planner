@@ -1,0 +1,83 @@
+/* Move login box slightly left (not too right) */
+.login-hero {
+    height: 100vh;
+    width: 100%;
+
+    background: url("https://img.freepik.com/premium-photo/travel-accessories-creating-frame-light-blue-background-with-copy-space_87742-45603.jpg?w=360");
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding-right: 120px;
+}
+/* Bigger login box */
+.login-box {
+    width: 80%;
+    max-width: 600px;
+    padding: 150px 200px;
+    border-radius: 18px;
+    background-color: #1c5fd1;
+    margin-right: 400px;
+}
+
+/*  Login Heading */
+.login-box h2 {
+    text-align: center;
+    font-size: 100px;
+    font-weight: bold;
+
+    color: #f4c430;   /* soft gold */
+    margin-bottom: 25px;
+}
+
+/* Labels */
+.input-label {
+    display: block;
+    font-size: 70px;
+    font-weight: bold;
+
+    margin-top: 15px;
+    margin-bottom: 6px;
+
+    color: #ffffff;
+}
+
+/* Inputs */
+.login-box input {
+    width: 100%;
+    padding: 40px;
+    font-size: 45px;
+
+    border-radius: 8px;
+    border: none;
+
+    margin-bottom: 100px;
+}
+
+/* 🔵 Bigger Blue Button */
+.login-box button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+
+    font-size: 50px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 30px;
+
+    background-color:#f4c430 ;
+    color: white;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover */
+.login-box button:hover {
+    background-color: #f4c430;
+    transform: scale(1.03);
+}

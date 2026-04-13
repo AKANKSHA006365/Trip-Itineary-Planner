@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Trip Planner</title>
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+
+<div class="login-hero">
+
+    <!-- RIGHT SIDE LOGIN BOX -->
+    <form class="login-box" id="loginForm">
+
+        <h2>Login</h2>
+
+        <!-- Name -->
+        <input type="text" id="name" placeholder="Enter Name">
+
+        <!-- Email -->
+        <input type="email" id="email" placeholder="Enter Email">
+
+        <!-- Password -->
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <!-- Button -->
+         <a href="{{url_for('planner')}}"></a>Go to Planner</a>
+        <button type="submit">Login</button>
+
+    </form>
+
+</div>
+
+<!-- JS CONNECTED -->
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+    // Empty check
+    if (name === "" || email === "" || password === "") {
+        alert("All fields are required!");
+        return;
+    }
+
+    // Email validation
+    if (!email.match(emailPattern)) {
+        alert("Please enter a valid email!");
+        return;
+    }
+
+    // Password validation
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters!");
+        return;
+    }
+
+    // Success
+    alert("Login Successful!");
+
+    // Redirect to planner page
+  window.location.href = "/planner";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner</title>
+
+    <!-- IMPORTANT: Flask CSS path -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='planner.css') }}">
+</head>
+<body>
+
+<div class="hero">
+
+    <!-- Background Video -->
+    <video autoplay muted loop class="bg-video">
+        <source src="https://www.shutterstock.com/shutterstock/videos/3476578653/preview/stock-footage-landscape-travel-background-animation-view.mp4" type="video/mp4">
+    </video>
+
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!--  Main Heading -->
+        <h1 class="main-heading">Lets , Plan The Itinerary</h1>
+
+        <!--  FORM STARTS HERE -->
+        <form action="/result" method="POST">
+
+            <div class="box-container">
+
+                <!-- LEFT BOX -->
+                <div class="box">
+                    <h3>Select Your City</h3>
+                    <select name="city" required>
+                        <option disabled selected>Select City</option>
+
+                        <option>Agra</option>
+                        <option>Ahmedabad</option>
+                        <option>Amritsar</option>
+                        <option>Bengaluru</option>
+                        <option>Bhopal</option>
+                        <option>Bhubaneswar</option>
+                        <option>Chandigarh</option>
+                        <option>Chennai</option>
+                        <option>Coorg</option>
+                        <option>Darjeeling</option>
+                        <option>Dehradun</option>
+                        <option>Delhi</option>
+                        <option>Dharamshala</option>
+                        <option>Gangtok</option>
+                        <option>Goa</option>
+                        <option>Gokarna</option>
+                        <option>Gulmarg</option>
+                        <option>Guwahati</option>
+                        <option>Hampi</option>
+                        <option>Hyderabad</option>
+                        <option>Jaipur</option>
+                        <option>Jaisalmer</option>
+                        <option>Jodhpur</option>
+                        <option>Kanyakumari</option>
+                        <option>Kasauli</option>
+                        <option>Kochi</option>
+                        <option>Kolkata</option>
+                        <option>Leh</option>
+                        <option>Lucknow</option>
+                        <option>Manali</option>
+                        <option>Mangalore</option>
+                        <option>Mount Abu</option>
+                        <option>Mumbai</option>
+                        <option>Mussoorie</option>
+                        <option>Mysore</option>
+                        <option>Nainital</option>
+                        <option>Ooty</option>
+                        <option>Patna</option>
+                        <option>Pondicherry</option>
+                        <option>Pune</option>
+                        <option>Rishikesh</option>
+                        <option>Shimla</option>
+                        <option>Srinagar</option>
+                        <option>Surat</option>
+                        <option>Tirupati</option>
+                        <option>Udaipur</option>
+                        <option>Varanasi</option>
+                        <option>Vijayawada</option>
+                        <option>Visakhapatnam</option>
+
+                    </select>
+                </div>
+
+                <!-- RIGHT BOX -->
+                <div class="box">
+                    <h3>Select Days</h3>
+                    <select name="days" required>
+                        <option disabled selected>Select Days</option>
+
+                        <option value="1">1 Day</option>
+                        <option value="2">2 Days</option>
+                        <option value="3">3 Days</option>
+                        <option value="4">4 Days</option>
+                        <option value="5">5 Days</option>
+                        <option value="6">6 Days</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <!--  BUTTON FIXED -->
+            <button type="submit" class="search-btn">Search</button>
+
+        </form>
+        <!-- FORM ENDS HERE -->
+
+    </div>
+
+</div>
+
+</body>
+</html>

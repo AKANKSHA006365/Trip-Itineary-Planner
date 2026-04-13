@@ -1,0 +1,115 @@
+
+/* RESET */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+}
+
+/* BACKGROUND */
+.bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url("https://img.freepik.com/premium-photo/travel-concept-with-backpacks-maps-landmarks-plane_1285860-6454.jpg") no-repeat center center/cover;
+    z-index: -2;
+}
+
+/* DARK OVERLAY FOR READABILITY */
+.overlay-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* TITLE */
+.title {
+    font-size: 100px;              /*  BIG */
+    font-weight: 800;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    letter-spacing: 1.5px;
+}
+
+/* GRID CONTAINER */
+.grid {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: flex;
+    grid-template-columns: repeat(3, 1fr);   /* max 3 cards */
+    gap: 50px;                               /*  spacing */
+    padding: 40px 120px;
+    flex-wrap: wrap;
+    justify-content: spaces-between;
+    align-items: flex-start;
+    align-items: start;
+
+    overflow: visible;
+}
+
+/* CARD (PORTRAIT BIG BOX) */
+.card {
+    width: 65%;
+    max-width: 370px;       /*  BIG CARD */
+    min-height: 480px;      /* flexible height */
+
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 20px;
+    padding: 25px;
+    color: white;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+/* DAY TITLE */
+.card h3 {
+    font-size: 50px;
+    text-align: center;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+
+/* PLACES CONTAINER */
+.places {
+    overflow-y: auto;      /* scroll inside card */
+    max-height: 320px;
+    padding-right: 5px;
+}
+
+/* PLACE TEXT */
+.places p {
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 300;
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #f1f1f1;
+}
+
+/* SCROLLBAR (OPTIONAL NICE LOOK) */
+.places::-webkit-scrollbar {
+    width: 5px;
+}
+
+.places::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.places::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
