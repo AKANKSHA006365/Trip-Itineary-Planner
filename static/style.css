@@ -28,13 +28,13 @@ body {
 
 /*  Big text */
 .overlay h1 {
-    font-size: 150px;
+    font-size: 180px;
     font-weight: bold;
 }
 
 /*  Tagline */
 .overlay h2 {
-    font-size: 80px;
+    font-size: 100px;
     margin: 20px 0;
 }
 

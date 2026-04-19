@@ -4,69 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Trip Planner</title>
-    <link rel="stylesheet" href="../static/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
 <body>
 
-<div class="login-hero">
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-icon">✈️</span>
+            <h1>Welcome Back</h1>
+            <p>Login to continue your journey</p>
+        </div>
 
-    <!-- RIGHT SIDE LOGIN BOX -->
-    <form class="login-box" id="loginForm">
+        <form id="loginForm" class="login-form">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+                <span class="input-icon">👤</span>
+            </div>
 
-        <h2>Login</h2>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <span class="input-icon">📧</span>
+            </div>
 
-        <!-- Name -->
-        <input type="text" id="name" placeholder="Enter Name">
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <span class="input-icon">🔒</span>
+            </div>
 
-        <!-- Email -->
-        <input type="email" id="email" placeholder="Enter Email">
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="remember"> Remember me
+                </label>
+                <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot Password?</a>
+            </div>
 
-        <!-- Password -->
-        <input type="password" id="password" placeholder="Enter Password">
-
-        <!-- Button -->
-         <a href="{{url_for('planner')}}"></a>Go to Planner</a>
-        <button type="submit">Login</button>
-
-    </form>
-
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+    </div>
 </div>
 
-<!-- JS CONNECTED -->
-<script>
-document.getElementById("loginForm").addEventListener("submit", function(event) {
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
 
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    let name = document.getElementById("name").value.trim();
+    let username = document.getElementById("username").value.trim();
     let email = document.getElementById("email").value.trim();
-    let password = document.getElementById("password").value.trim();
+    let password = document.getElementById("password").value;
 
-    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-
-    // Empty check
-    if (name === "" || email === "" || password === "") {
-        alert("All fields are required!");
+    if (!username || !email || !password) {
+        showToast("All fields are required!", "error");
         return;
     }
 
-    // Email validation
-    if (!email.match(emailPattern)) {
-        alert("Please enter a valid email!");
+    if (username.length < 3) {
+        showToast("Username must be at least 3 characters!", "error");
         return;
     }
 
-    // Password validation
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        showToast("Please enter a valid email address!", "error");
+        return;
+    }
+
     if (password.length < 6) {
-        alert("Password must be at least 6 characters!");
+        showToast("Password must be at least 6 characters!", "error");
         return;
     }
 
-    // Success
-    alert("Login Successful!");
+    const loginBtn = document.querySelector('.login-btn');
+    const originalText = loginBtn.textContent;
+    loginBtn.textContent = 'Logging in...';
+    loginBtn.disabled = true;
 
-    // Redirect to planner page
-  window.location.href = "/planner";
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast(data.message, "success");
+            setTimeout(() => {
+                window.location.href = "/planner";
+            }, 1500);
+        } else {
+            showToast(data.message, "error");
+            loginBtn.textContent = originalText;
+            loginBtn.disabled = false;
+        }
+    } catch (error) {
+        showToast("Network error! Please try again.", "error");
+        loginBtn.textContent = originalText;
+        loginBtn.disabled = false;
+    }
+});
+
+document.getElementById("forgotPasswordLink").addEventListener("click", function(e) {
+    e.preventDefault();
+    window.location.href = "/forgot-password";
+});
+
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    
+    setTimeout(() => {
+        toast.className = 'toast';
+    }, 3000);
+}
+
+if (localStorage.getItem('rememberedEmail')) {
+    document.getElementById('email').value = localStorage.getItem('rememberedEmail');
+    document.getElementById('remember').checked = true;
+}
+
+document.getElementById('remember').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        localStorage.setItem('rememberedEmail', document.getElementById('email').value);
+    } else {
+        localStorage.removeItem('rememberedEmail');
+    }
 });
 </script>
 

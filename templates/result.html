@@ -1,37 +1,278 @@
-6<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Your Itinerary</title>
-
+<title>Your Itinerary - Trip Planner</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <div class="bg"></div>
 <div class="overlay-bg"></div>
 
-<h1 class="title">Your Travel Itinerary</h1>
+<div class="main-wrapper">
+    <!-- ITINERARY SECTION - Full width cards -->
+    <div class="itinerary-section">
+        <h1 class="title">Your Travel Itinerary</h1>
+        <p class="subtitle">{{ city }} | {{ days }} Days Journey</p>
 
-<div class="grid">
-{% for day, places in plan.items() %}
+        <!-- Row 1 - 3 cards -->
+        <div class="grid-row row-top">
+            {% for day, places in plan.items() %}
+                {% if loop.index0 < 3 %}
+                <div class="card card-{{ loop.index0 }}">
+                    <div class="card-header">
+                        <span class="day-number">{{ day }}</span>
+                        <span class="day-label">DAY</span>
+                    </div>
+                    <div class="places-wrapper">
+                        <div class="places">
+                            {% for place, hours in places %}
+                                <div class="place-item">
+                                    <span class="place-icon">📍</span>
+                                    <div class="place-info">
+                                        <span class="place-name">{{ place }}</span>
+                                        <span class="place-hours">{{ hours }} hours</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
 
-<div class="card">
+        <!-- Row 2 - Next 3 cards -->
+        <div class="grid-row row-bottom">
+            {% for day, places in plan.items() %}
+                {% if loop.index0 >= 3 %}
+                <div class="card card-{{ loop.index0 - 3 }}">
+                    <div class="card-header">
+                        <span class="day-number">{{ day }}</span>
+                        <span class="day-label">DAY</span>
+                    </div>
+                    <div class="places-wrapper">
+                        <div class="places">
+                            {% for place, hours in places %}
+                                <div class="place-item">
+                                    <span class="place-icon">📍</span>
+                                    <div class="place-info">
+                                        <span class="place-name">{{ place }}</span>
+                                        <span class="place-hours">{{ hours }} hours</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 
-  <div class="places">
-    <h3>Day {{ day }}</h3>
+    <!-- TRAVEL ROUTES SECTION - Below Itinerary -->
+    <div class="routes-section">
+        <div class="routes-header">
+            <span class="routes-icon">🗺️</span>
+            <h2>How to Reach {{ city }}</h2>
+            <p>Select your current city to see travel routes</p>
+        </div>
 
-    {% for place, hours in places %}
-      <p>📍 {{ place }} - {{ hours }} hrs</p>
-    {% endfor %}
+        <div class="current-city-selector">
+            <label>Your Current City:</label>
+            <select id="currentCity" class="city-select">
+                <option value="">Select your current city</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Pune">Pune</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+                <option value="Jaipur">Jaipur</option>
+                <option value="Lucknow">Lucknow</option>
+                <option value="Nagpur">Nagpur</option>
+                <option value="Indore">Indore</option>
+                <option value="Bhopal">Bhopal</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Goa">Goa</option>
+            </select>
+        </div>
 
-  </div>
+        <div id="routesContainer" class="routes-container">
+            <div class="routes-placeholder">
+                <span>✈️</span>
+                <p>Select a city above to see travel options to {{ city }}</p>
+            </div>
+        </div>
+    </div>
 
+    <!-- Footer -->
+    <div class="footer-bottom">
+        <p>✨ Thank you for choosing us! Have a wonderful journey ✨</p>
+        <a href="/planner" class="plan-again-bottom">Plan Another Trip</a>
+    </div>
 </div>
 
-{% endfor %}
-</div>
+<script>
+const travelData = {
+    'Mumbai': {
+        'Delhi': { flight: { distance: '1,150 km', time: '2h 10m', cost: '₹3,500 - ₹8,000' }, train: { distance: '1,384 km', time: '15-18h', cost: '₹500 - ₹2,500' }, bus: { distance: '1,400 km', time: '24-28h', cost: '₹1,200 - ₹2,500' }, car: { distance: '1,384 km', time: '22-24h', cost: '₹6,000 - ₹8,000' } },
+        'Bangalore': { flight: { distance: '980 km', time: '1h 40m', cost: '₹3,000 - ₹7,000' }, train: { distance: '1,022 km', time: '20-22h', cost: '₹600 - ₹2,800' }, bus: { distance: '1,000 km', time: '18-20h', cost: '₹1,000 - ₹2,200' }, car: { distance: '980 km', time: '16-18h', cost: '₹5,000 - ₹7,000' } },
+        'Chennai': { flight: { distance: '1,200 km', time: '2h', cost: '₹3,500 - ₹8,500' }, train: { distance: '1,276 km', time: '22-24h', cost: '₹700 - ₹3,000' }, bus: { distance: '1,250 km', time: '22-24h', cost: '₹1,200 - ₹2,500' }, car: { distance: '1,276 km', time: '20-22h', cost: '₹6,000 - ₹9,000' } },
+        'Kolkata': { flight: { distance: '1,650 km', time: '2h 30m', cost: '₹4,000 - ₹10,000' }, train: { distance: '1,940 km', time: '28-32h', cost: '₹800 - ₹3,500' }, bus: { distance: '1,900 km', time: '32-36h', cost: '₹1,500 - ₹3,000' }, car: { distance: '1,940 km', time: '30-34h', cost: '₹8,000 - ₹12,000' } },
+        'Hyderabad': { flight: { distance: '710 km', time: '1h 20m', cost: '₹2,500 - ₹6,000' }, train: { distance: '790 km', time: '12-14h', cost: '₹500 - ₹2,000' }, bus: { distance: '750 km', time: '12-14h', cost: '₹800 - ₹1,800' }, car: { distance: '710 km', time: '12-14h', cost: '₹4,000 - ₹6,000' } },
+        'Pune': { flight: { distance: '150 km', time: '45m', cost: '₹2,000 - ₹4,000' }, train: { distance: '192 km', time: '3-4h', cost: '₹200 - ₹800' }, bus: { distance: '150 km', time: '3-4h', cost: '₹300 - ₹600' }, car: { distance: '150 km', time: '2-3h', cost: '₹1,000 - ₹2,000' } },
+        'Ahmedabad': { flight: { distance: '440 km', time: '1h 10m', cost: '₹2,500 - ₹5,500' }, train: { distance: '490 km', time: '6-8h', cost: '₹300 - ₹1,500' }, bus: { distance: '460 km', time: '8-10h', cost: '₹500 - ₹1,200' }, car: { distance: '440 km', time: '7-8h', cost: '₹2,500 - ₹4,000' } },
+        'Jaipur': { flight: { distance: '1,140 km', time: '2h', cost: '₹3,000 - ₹7,000' }, train: { distance: '1,160 km', time: '15-18h', cost: '₹600 - ₹2,500' }, bus: { distance: '1,120 km', time: '18-20h', cost: '₹1,000 - ₹2,000' }, car: { distance: '1,140 km', time: '18-20h', cost: '₹5,000 - ₹8,000' } }
+    },
+    'Delhi': {
+        'Mumbai': { flight: { distance: '1,150 km', time: '2h 10m', cost: '₹3,500 - ₹8,000' }, train: { distance: '1,384 km', time: '15-18h', cost: '₹500 - ₹2,500' }, bus: { distance: '1,400 km', time: '24-28h', cost: '₹1,200 - ₹2,500' }, car: { distance: '1,384 km', time: '22-24h', cost: '₹6,000 - ₹8,000' } },
+        'Bangalore': { flight: { distance: '2,050 km', time: '2h 45m', cost: '₹4,500 - ₹12,000' }, train: { distance: '2,154 km', time: '33-36h', cost: '₹900 - ₹4,000' }, bus: { distance: '2,100 km', time: '36-40h', cost: '₹2,000 - ₹4,000' }, car: { distance: '2,050 km', time: '32-35h', cost: '₹10,000 - ₹15,000' } },
+        'Chennai': { flight: { distance: '1,750 km', time: '2h 30m', cost: '₹4,000 - ₹10,000' }, train: { distance: '2,150 km', time: '28-32h', cost: '₹800 - ₹3,500' }, bus: { distance: '2,100 km', time: '30-35h', cost: '₹1,800 - ₹3,500' }, car: { distance: '1,750 km', time: '28-30h', cost: '₹8,000 - ₹12,000' } },
+        'Kolkata': { flight: { distance: '1,450 km', time: '2h 15m', cost: '₹3,500 - ₹9,000' }, train: { distance: '1,530 km', time: '17-20h', cost: '₹600 - ₹3,000' }, bus: { distance: '1,500 km', time: '24-28h', cost: '₹1,500 - ₹3,000' }, car: { distance: '1,450 km', time: '22-24h', cost: '₹7,000 - ₹10,000' } },
+        'Hyderabad': { flight: { distance: '1,500 km', time: '2h 20m', cost: '₹3,500 - ₹9,000' }, train: { distance: '1,600 km', time: '24-28h', cost: '₹700 - ₹3,000' }, bus: { distance: '1,550 km', time: '28-30h', cost: '₹1,500 - ₹2,800' }, car: { distance: '1,500 km', time: '24-26h', cost: '₹7,000 - ₹11,000' } },
+        'Pune': { flight: { distance: '1,200 km', time: '2h', cost: '₹3,000 - ₹8,000' }, train: { distance: '1,500 km', time: '22-25h', cost: '₹600 - ₹2,800' }, bus: { distance: '1,450 km', time: '26-30h', cost: '₹1,200 - ₹2,500' }, car: { distance: '1,200 km', time: '20-22h', cost: '₹6,000 - ₹9,000' } }
+    },
+    'Bangalore': {
+        'Mumbai': { flight: { distance: '980 km', time: '1h 40m', cost: '₹3,000 - ₹7,000' }, train: { distance: '1,022 km', time: '20-22h', cost: '₹600 - ₹2,800' }, bus: { distance: '1,000 km', time: '18-20h', cost: '₹1,000 - ₹2,200' }, car: { distance: '980 km', time: '16-18h', cost: '₹5,000 - ₹7,000' } },
+        'Delhi': { flight: { distance: '2,050 km', time: '2h 45m', cost: '₹4,500 - ₹12,000' }, train: { distance: '2,154 km', time: '33-36h', cost: '₹900 - ₹4,000' }, bus: { distance: '2,100 km', time: '36-40h', cost: '₹2,000 - ₹4,000' }, car: { distance: '2,050 km', time: '32-35h', cost: '₹10,000 - ₹15,000' } },
+        'Chennai': { flight: { distance: '350 km', time: '1h', cost: '₹2,000 - ₹5,000' }, train: { distance: '362 km', time: '6-8h', cost: '₹300 - ₹1,500' }, bus: { distance: '350 km', time: '7-8h', cost: '₹500 - ₹1,200' }, car: { distance: '350 km', time: '6-7h', cost: '₹2,000 - ₹3,500' } },
+        'Kolkata': { flight: { distance: '1,550 km', time: '2h 30m', cost: '₹4,000 - ₹10,000' }, train: { distance: '1,920 km', time: '26-30h', cost: '₹800 - ₹3,500' }, bus: { distance: '1,900 km', time: '30-34h', cost: '₹1,800 - ₹3,200' }, car: { distance: '1,550 km', time: '26-28h', cost: '₹8,000 - ₹12,000' } },
+        'Hyderabad': { flight: { distance: '500 km', time: '1h 10m', cost: '₹2,500 - ₹6,000' }, train: { distance: '600 km', time: '8-10h', cost: '₹400 - ₹1,800' }, bus: { distance: '570 km', time: '9-11h', cost: '₹700 - ₹1,500' }, car: { distance: '500 km', time: '8-9h', cost: '₹2,500 - ₹4,000' } }
+    }
+};
+
+const destinationCity = "{{ city }}";
+
+function getTravelRoutes(currentCity, destinationCity) {
+    if (travelData[currentCity] && travelData[currentCity][destinationCity]) {
+        return travelData[currentCity][destinationCity];
+    }
+    if (travelData[destinationCity] && travelData[destinationCity][currentCity]) {
+        return travelData[destinationCity][currentCity];
+    }
+    return null;
+}
+
+function displayRoutes(currentCity) {
+    const routesContainer = document.getElementById('routesContainer');
+    
+    if (!currentCity) {
+        routesContainer.innerHTML = `
+            <div class="routes-placeholder">
+                <span>✈️</span>
+                <p>Select a city above to see travel options to ${destinationCity}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const routes = getTravelRoutes(currentCity, destinationCity);
+    
+    if (!routes) {
+        routesContainer.innerHTML = `
+            <div class="routes-placeholder">
+                <span>⚠️</span>
+                <p>Travel data not available for route from ${currentCity} to ${destinationCity}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    routesContainer.innerHTML = `
+        <div class="routes-grid">
+            <div class="route-card flight">
+                <div class="route-icon">✈️</div>
+                <h3>Flight</h3>
+                <div class="route-details">
+                    <div class="route-detail">
+                        <span class="detail-label">Distance:</span>
+                        <span class="detail-value">${routes.flight.distance}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Travel Time:</span>
+                        <span class="detail-value">${routes.flight.time}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Estimated Cost:</span>
+                        <span class="detail-value">${routes.flight.cost}</span>
+                    </div>
+                </div>
+                <div class="route-badge">Fastest Option</div>
+            </div>
+            
+            <div class="route-card train">
+                <div class="route-icon">🚂</div>
+                <h3>Train</h3>
+                <div class="route-details">
+                    <div class="route-detail">
+                        <span class="detail-label">Distance:</span>
+                        <span class="detail-value">${routes.train.distance}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Travel Time:</span>
+                        <span class="detail-value">${routes.train.time}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Estimated Cost:</span>
+                        <span class="detail-value">${routes.train.cost}</span>
+                    </div>
+                </div>
+                <div class="route-badge">Budget Friendly</div>
+            </div>
+            
+            <div class="route-card bus">
+                <div class="route-icon">🚌</div>
+                <h3>Bus</h3>
+                <div class="route-details">
+                    <div class="route-detail">
+                        <span class="detail-label">Distance:</span>
+                        <span class="detail-value">${routes.bus.distance}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Travel Time:</span>
+                        <span class="detail-value">${routes.bus.time}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Estimated Cost:</span>
+                        <span class="detail-value">${routes.bus.cost}</span>
+                    </div>
+                </div>
+                <div class="route-badge">Economy Option</div>
+            </div>
+            
+            <div class="route-card car">
+                <div class="route-icon">🚗</div>
+                <h3>Car</h3>
+                <div class="route-details">
+                    <div class="route-detail">
+                        <span class="detail-label">Distance:</span>
+                        <span class="detail-value">${routes.car.distance}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Travel Time:</span>
+                        <span class="detail-value">${routes.car.time}</span>
+                    </div>
+                    <div class="route-detail">
+                        <span class="detail-label">Estimated Cost:</span>
+                        <span class="detail-value">${routes.car.cost}</span>
+                    </div>
+                </div>
+                <div class="route-badge">Flexible Option</div>
+            </div>
+        </div>
+    `;
+}
+
+document.getElementById('currentCity').addEventListener('change', function(e) {
+    const selectedCity = e.target.value;
+    displayRoutes(selectedCity);
+});
+</script>
 
 </body>
 </html>

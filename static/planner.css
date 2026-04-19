@@ -57,7 +57,7 @@ html, body {
 .main-heading {
     font-size: 120px;
     font-weight: bold;
-    color: #FFD700; /* gold */
+    color:#FFF ; /* gold */
     margin-bottom: 150px;
 }
 
@@ -82,7 +82,7 @@ html, body {
 
 /* Blue rectangular box */
 .box {
-    background-color: #0b3d91; /* dark blue */
+    background-color: #003262; /* dark blue */
     padding: 95px 100px;
     border-radius: 12px;
 
@@ -95,7 +95,7 @@ html, body {
 
 /*  Label inside box */
 .box h3 {
-    color: #FFD700; /* gold text */
+    color: #FFf; /* gold text */
     margin-bottom: 15px;
     font-size: 50px;
     font-weight: bold;
@@ -121,7 +121,7 @@ html, body {
     font-size: 40px;
     font-weight: bold;
 margin-top: 50px;
-    background-color: #FFD700;
+    background-color: #FFf;
     color: black;
 
     border: none;

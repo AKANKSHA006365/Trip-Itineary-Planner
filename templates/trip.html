@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - Trip Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-icon">🔐</span>
+            <h1>Reset Password</h1>
+            <p>Enter your email to receive reset token</p>
+        </div>
+
+        <div id="step1" class="step-content">
+            <form id="forgotForm" class="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="resetEmail" placeholder="Enter your registered email" required>
+                    <span class="input-icon">📧</span>
+                </div>
+
+                <button type="submit" class="login-btn">Send Reset Token</button>
+
+                <div class="form-options" style="justify-content: center;">
+                    <a href="{{ url_for('login') }}" class="forgot-link">← Back to Login</a>
+                </div>
+            </form>
+        </div>
+
+        <div id="step2" class="step-content" style="display: none;">
+            <form id="resetForm" class="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="resetEmail2" placeholder="Enter your email" required>
+                    <span class="input-icon">📧</span>
+                </div>
+
+                <div class="input-group">
+                    <label>Reset Token</label>
+                    <input type="text" id="token" placeholder="Enter the reset token" required>
+                    <span class="input-icon">🔑</span>
+                </div>
+
+                <div class="input-group">
+                    <label>New Password (App Login Password)</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password (min 6 characters)" required>
+                    <span class="input-icon">🔒</span>
+                </div>
+
+                <div class="input-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" placeholder="Confirm new password" required>
+                    <span class="input-icon">✓</span>
+                </div>
+
+                <button type="submit" class="login-btn">Reset Password</button>
+
+                <div class="form-options" style="justify-content: center;">
+                    <a href="#" id="backToStep1" class="forgot-link">← Back to Step 1</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+let resetEmail = '';
+let receivedToken = '';
+
+document.getElementById("forgotForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("resetEmail").value.trim();
+
+    if (!email) {
+        showToast("Please enter your email address!", "error");
+        return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        showToast("Please enter a valid email address!", "error");
+        return;
+    }
+
+    const forgotBtn = document.querySelector('#forgotForm .login-btn');
+    const originalText = forgotBtn.textContent;
+    forgotBtn.textContent = 'Sending...';
+    forgotBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/forgot-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            resetEmail = email;
+            receivedToken = data.token;
+            showToast(`${data.message}`, "success");
+            
+            // Auto-fill email and token in step 2
+            document.getElementById('resetEmail2').value = email;
+            document.getElementById('token').value = receivedToken;
+            
+            // Switch to step 2
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        } else {
+            showToast(data.message, "error");
+        }
+        
+        forgotBtn.textContent = originalText;
+        forgotBtn.disabled = false;
+    } catch (error) {
+        showToast("Network error! Please try again.", "error");
+        forgotBtn.textContent = originalText;
+        forgotBtn.disabled = false;
+    }
+});
+
+document.getElementById("resetForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("resetEmail2").value.trim();
+    const token = document.getElementById("token").value.trim();
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmNewPassword").value;
+
+    if (!email || !token || !newPassword || !confirmPassword) {
+        showToast("All fields are required!", "error");
+        return;
+    }
+
+    if (newPassword.length < 6) {
+        showToast("Password must be at least 6 characters!", "error");
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        showToast("Passwords do not match!", "error");
+        return;
+    }
+
+    const resetBtn = document.querySelector('#resetForm .login-btn');
+    const originalText = resetBtn.textContent;
+    resetBtn.textContent = 'Resetting...';
+    resetBtn.disabled = true;
+
+    try {
+        const response = await fetch('/api/reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, token, new_password: newPassword })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast(data.message, "success");
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 2000);
+        } else {
+            showToast(data.message, "error");
+            resetBtn.textContent = originalText;
+            resetBtn.disabled = false;
+        }
+    } catch (error) {
+        showToast("Network error! Please try again.", "error");
+        resetBtn.textContent = originalText;
+        resetBtn.disabled = false;
+    }
+});
+
+document.getElementById("backToStep1").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step1').style.display = 'block';
+    document.getElementById('resetEmail').value = '';
+    document.getElementById('resetEmail2').value = '';
+    document.getElementById('token').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmNewPassword').value = '';
+});
+
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    
+    setTimeout(() => {
+        toast.className = 'toast';
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
